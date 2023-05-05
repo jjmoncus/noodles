@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# noodles
+# noodles <img src="inst/figures/noodles-hexsticker.jpg" align="right" height="139" />
 
 <!-- badges: start -->
 
