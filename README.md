@@ -1,17 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gutils
+# noodles
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/gutils)](https://CRAN.R-project.org/package=gutils)
+status](https://www.r-pkg.org/badges/version/noodles)](https://CRAN.R-project.org/package=noodles)
 <!-- badges: end -->
 
-gutils is a catch-all R package for utilities that Gartner PPR
+noodles is a catch-all R package for utilities that Gartner PPR
 associates may find useful for doing routine data wrangling and analysis
 tasks in R.
 

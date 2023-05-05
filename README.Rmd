@@ -13,14 +13,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gutils
+# noodles
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/gutils)](https://CRAN.R-project.org/package=gutils)
+[![CRAN status](https://www.r-pkg.org/badges/version/noodles)](https://CRAN.R-project.org/package=noodles)
 <!-- badges: end -->
 
-gutils is a catch-all R package for utilities that Gartner PPR associates may
+noodles is a catch-all R package for utilities that Gartner PPR associates may
 find useful for doing routine data wrangling and analysis tasks in R.
 
 ## Installation
