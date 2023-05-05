@@ -1,0 +1,31 @@
+Package: gutils
+Title: R Utiliies for Gartner
+Version: 0.0.2
+Authors@R: 
+    person("J.J.", "Moncus", , "jj.moncus@gartner.com", role = c("aut", "cre"))
+Description: A grabbag of useful functions and data structures useful for 
+  analyses of Gartner data assets The package is designed specifically for the 
+  Customer Service and Support PPR team but is broadly useful for anyone
+  at Gartner hoping to do routine data analysis in R.
+License: GPL (>= 2)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Imports: 
+    cli,
+    dplyr,
+    ggplot2,
+    glue,
+    lifecycle,
+    magrittr,
+    pewmethods,
+    purrr,
+    reactable,
+    rlang,
+    stringr,
+    tibble,
+    tidyr,
+    tidyselect
