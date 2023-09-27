@@ -1,6 +1,6 @@
 Package: noodles
 Title: R Utiliies for Gartner
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person("J.J.", "Moncus", , "jj.moncus@gartner.com", role = c("aut", "cre"))
 Description: A grabbag of useful functions and data structures useful for 

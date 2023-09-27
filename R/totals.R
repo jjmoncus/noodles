@@ -12,10 +12,17 @@ inform_var_count <- function(data) {
   cli_inform(var_count_msg)
 }
 
-n_table <- function(data, var) {
+n_table <- function(data, var, among = NULL) {
 
   quo_var <- enquo(var)
-
+  quo_among <- enquo(among)
+  
+  if(!quo_is_null(quo_among)) {
+    
+    data <- data %>%
+      filter(!is.na(!!quo_among))
+  }
+  
   data %>%
     # `select`, rather than `pull`, is important
     # because the output of `table` is named after `var`
@@ -128,7 +135,7 @@ crosstab <- function(data, var, by, na.rm = FALSE, digits = 2, complete = TRUE) 
   quo_by <- enquo(by)
   chr_by <- quo_by %>% as_name()
 
-  n_table <- n_table(data, var = !!quo_by)
+  n_table <- n_table(data, var = !!quo_by, among = !!quo_var)
 
   totals_by(data, !!quo_var, !!quo_by,
             na.rm = na.rm,
