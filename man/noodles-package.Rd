@@ -4,9 +4,9 @@
 \name{noodles-package}
 \alias{noodles}
 \alias{noodles-package}
-\title{noodles: R Utiliies for Gartner}
+\title{noodles: R Utiliies for Survey Work}
 \description{
-A grabbag of useful functions and data structures useful for analyses of Gartner data assets The package is designed specifically for the Customer Service and Support PPR team but is broadly useful for anyone at Gartner hoping to do routine data analysis in R.
+A grabbag of useful functions for survey data wrangling and analysis.
 }
 \author{
 \strong{Maintainer}: J.J. Moncus \email{jj.moncus@gartner.com}

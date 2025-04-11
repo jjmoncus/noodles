@@ -1,17 +1,17 @@
-
-
 #' Quickly make a metadata file for a dataset
 #'
 #' @export
 #'
 #' @importFrom tibble tibble
 meta <- function(data) {
-
   data %>%
-    {tibble(var = names(.),
-            class = map(., class),
-            levels = map(., levels),
-            label = map(., ~attr(.x, "label")))
+    {
+      tibble(
+        var = names(.),
+        class = map(., class),
+        levels = map(., levels),
+        label = map(., ~ attr(.x, "label"))
+      )
     }
 }
 
@@ -30,10 +30,8 @@ meta <- function(data) {
 #' @export
 
 find_level <- function(data, pattern) {
-
   names(data) %>%
     keep(function(x) {
-
       levels(data[[x]]) %>%
         some(function(y) {
           str_detect(y, pattern = pattern)
@@ -42,7 +40,7 @@ find_level <- function(data, pattern) {
 
   vars_to_keep %>%
     set_names() %>%
-    map(~levels(data[[.x]]))
+    map(~ levels(data[[.x]]))
 }
 
 #' Find variables in a dataset whose label attribute match some pattern
@@ -55,10 +53,8 @@ find_level <- function(data, pattern) {
 #'@export
 
 find_label <- function(data, pattern) {
-
   names(data) %>%
     keep(function(x) {
-
       attr(data[[x]], "label") %>%
         some(function(y) {
           str_detect(y, pattern = pattern)
@@ -67,10 +63,8 @@ find_label <- function(data, pattern) {
 
   vars_to_keep %>%
     set_names() %>%
-    map(~attr(data[[.x]], "label"))
+    map(~ attr(data[[.x]], "label"))
 }
-
-
 
 
 #' Lowercase names and return data
@@ -78,7 +72,6 @@ find_label <- function(data, pattern) {
 #'
 #' @importFrom stringr str_to_lower
 lower_names <- function(data) {
-
   names(data) <- str_to_lower(names(data))
   return(data)
 }
@@ -88,7 +81,6 @@ lower_names <- function(data) {
 #'
 #' @importFrom ggplot2 theme_minimal theme element_blank
 theme_g <- function(...) {
-
   # potential feature addition: allow people to add theme parameters
   # inside function call
   # dots <- list2(...)
@@ -104,15 +96,12 @@ theme_g <- function(...) {
 #'
 #' @importFrom reactable reactable
 greactable <- function(data) {
-
-  reactable(data,
-            height = 500)
+  reactable(data, height = 500)
 }
 
 #' Add a variable label to variable
 #' @export
 add_label <- function(var, label) {
-
   structure(
     var,
     label = label
@@ -125,18 +114,16 @@ add_label <- function(var, label) {
 #' @importFrom rlang enquos
 #' @importFrom purrr map
 get_labels <- function(data, ...) {
-
   criteria <- enquos(...)
 
   data %>%
     select(!!!criteria) %>%
-    map(~attr(.x, "label"))
+    map(~ attr(.x, "label"))
 }
 
 #' How many non-NA responses are there for a variable?
 #' @export
 n_size <- function(data, var) {
-
   quo_var <- enquo(var)
 
   data %>%
@@ -148,12 +135,17 @@ n_size <- function(data, var) {
 #' How many non-NA responses are there for a group of variables?
 #' @export
 n_sizes <- function(data, group) {
-
   data %>%
     select(matches(group)) %>%
     names() %>%
     purrr::set_names() %>%
-    map(~.x %>% sym() %>% {n_size(data, !!.)})
+    map(
+      ~ .x %>%
+        sym() %>%
+        {
+          n_size(data, !!.)
+        }
+    )
 }
 
 #' Get names of a dataset, then auto-name them
@@ -164,12 +156,38 @@ n_sizes <- function(data, group) {
 #'
 #' @export
 auto_names <- function(data) {
-
   data %>%
     names() %>%
     set_names()
 }
 
 
-
-
+#' Find Variables by Pattern
+#'
+#' Identifies and returns variable names from a dataset that match a specified pattern, while excluding certain patterns.
+#'
+#' @param data A data frame from which variable names are to be extracted.
+#' @param pattern A character string representing the pattern to match variable names against.
+#' @param exclude A character string representing the pattern to exclude from the matched variable names. Default is `"(_other)|(o$)|(FLAG)|(Flag)|(oe)"`.
+#'
+#' @return A character vector of variable names that match the specified pattern and do not match the exclusion pattern.
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage:
+#' vars <- find_vars(data = my_data, pattern = "Q23")
+#' }
+#'
+#' @importFrom stringr str_subset
+find_vars <- function(
+  data,
+  pattern,
+  exclude = "(_other)|(o$)|(FLAG)|(Flag)|(oe)"
+) {
+  data %>%
+    names() %>%
+    # grab all variables assocated with that index
+    str_subset(pattern = pattern) %>%
+    # remove any vars for other category
+    str_subset(pattern = exclude, negate = TRUE)
+}

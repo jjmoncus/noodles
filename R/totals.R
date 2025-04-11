@@ -1,5 +1,3 @@
-
-
 #' Inform the user of the number of variables matched
 #'
 #' @keywords Internal
@@ -7,22 +5,19 @@
 #' @importFrom glue glue
 #' @importFrom cli cli_inform
 inform_var_count <- function(data) {
-
   var_count_msg <- glue("Matching {length(data)} variables...")
   cli_inform(var_count_msg)
 }
 
 n_table <- function(data, var, among = NULL) {
-
   quo_var <- enquo(var)
   quo_among <- enquo(among)
-  
-  if(!quo_is_null(quo_among)) {
-    
+
+  if (!quo_is_null(quo_among)) {
     data <- data %>%
       filter(!is.na(!!quo_among))
   }
-  
+
   data %>%
     # `select`, rather than `pull`, is important
     # because the output of `table` is named after `var`
@@ -42,17 +37,18 @@ n_table <- function(data, var, among = NULL) {
 #'
 #' @export
 totals <- function(data, var, na.rm = FALSE, digits = 2, complete = TRUE) {
-
   quo_var <- enquo(var)
   chr_var <- quo_var %>% as_name()
   var <- data %>% pull(!!quo_var)
-  if(!is.factor(var)) stop("`var` must be a factor")
+  if (!is.factor(var)) stop("`var` must be a factor")
 
-  out <- get_totals(var = chr_var,
-                    df = data,
-                    digits = digits,
-                    complete = complete,
-                    na.rm = na.rm) %>%
+  out <- get_totals(
+    var = chr_var,
+    df = data,
+    digits = digits,
+    complete = complete,
+    na.rm = na.rm
+  ) %>%
     rename(value = unweighted) %>%
     as_tibble()
 
@@ -65,23 +61,31 @@ totals <- function(data, var, na.rm = FALSE, digits = 2, complete = TRUE) {
 #' @importFrom dplyr select
 #'
 #' @export
-totals_by <- function(data, var, by, na.rm = FALSE, digits = 2, complete = TRUE) {
-
+totals_by <- function(
+  data,
+  var,
+  by,
+  na.rm = FALSE,
+  digits = 2,
+  complete = TRUE
+) {
   quo_var <- enquo(var)
   chr_var <- quo_var %>% as_name()
   quo_by <- enquo(by)
   chr_by <- quo_by %>% as_name()
   var <- data %>% pull(!!quo_var)
   by <- data %>% pull(!!quo_by)
-  if(!is.factor(var)) stop("`var` must be a factor")
-  if(!is.factor(by)) stop("`by` must be a factor")
+  if (!is.factor(var)) stop("`var` must be a factor")
+  if (!is.factor(by)) stop("`by` must be a factor")
 
-  out <- pewmethods::get_totals(var = chr_var,
-                                df = data,
-                                by = chr_by,
-                                digits = digits,
-                                complete = complete,
-                                na.rm = na.rm) %>%
+  out <- pewmethods::get_totals(
+    var = chr_var,
+    df = data,
+    by = chr_by,
+    digits = digits,
+    complete = complete,
+    na.rm = na.rm
+  ) %>%
     select(-weight_name) %>%
     as_tibble()
 
@@ -96,8 +100,13 @@ totals_by <- function(data, var, by, na.rm = FALSE, digits = 2, complete = TRUE)
 #' @importFrom rlang sym
 #'
 #' @export
-totals_list <- function(data, vars, na.rm = FALSE, digits = 2, complete = TRUE) {
-
+totals_list <- function(
+  data,
+  vars,
+  na.rm = FALSE,
+  digits = 2,
+  complete = TRUE
+) {
   criteria <- enquo(vars)
 
   new_data <- data %>%
@@ -108,13 +117,14 @@ totals_list <- function(data, vars, na.rm = FALSE, digits = 2, complete = TRUE) 
   new_data %>%
     names() %>%
     purrr::set_names() %>%
-    map(~.x %>%
-          sym() %>%
-          {totals(data, !!.,
-                  na.rm = na.rm,
-                  digits = digits,
-                  complete = complete)} %>%
-          rename(level = .x))
+    map(
+      ~ .x %>%
+        sym() %>%
+        {
+          totals(data, !!., na.rm = na.rm, digits = digits, complete = complete)
+        } %>%
+        rename(level = .x)
+    )
 }
 
 #' Unweighted crosstab of one variable by another
@@ -129,23 +139,34 @@ totals_list <- function(data, vars, na.rm = FALSE, digits = 2, complete = TRUE) 
 #' @importFrom dplyr left_join
 #'
 #' @export
-crosstab <- function(data, var, by, na.rm = FALSE, digits = 2, complete = TRUE) {
-
+crosstab <- function(
+  data,
+  var,
+  by,
+  na.rm = FALSE,
+  digits = 2,
+  complete = TRUE
+) {
   quo_var <- enquo(var)
   quo_by <- enquo(by)
   chr_by <- quo_by %>% as_name()
 
   n_table <- n_table(data, var = !!quo_by, among = !!quo_var)
 
-  totals_by(data, !!quo_var, !!quo_by,
-            na.rm = na.rm,
-            digits = digits,
-            complete = complete) %>%
-    pivot_longer(cols = c(everything(), -!!quo_var),
-                 names_to = "level",
-                 values_to = "value") %>%
-    pivot_wider(names_from = !!quo_var,
-                values_from = value) %>%
+  totals_by(
+    data,
+    !!quo_var,
+    !!quo_by,
+    na.rm = na.rm,
+    digits = digits,
+    complete = complete
+  ) %>%
+    pivot_longer(
+      cols = c(everything(), -!!quo_var),
+      names_to = "level",
+      values_to = "value"
+    ) %>%
+    pivot_wider(names_from = !!quo_var, values_from = value) %>%
     left_join(n_table, by = c("level" = chr_by))
 }
 
@@ -153,8 +174,14 @@ crosstab <- function(data, var, by, na.rm = FALSE, digits = 2, complete = TRUE) 
 #' Unweighted crosstab of multiple variables by one crossing variable
 #'
 #' @export
-crosstab_list <- function(data, vars, by, na.rm = FALSE, digits = 2, complete = TRUE) {
-
+crosstab_list <- function(
+  data,
+  vars,
+  by,
+  na.rm = FALSE,
+  digits = 2,
+  complete = TRUE
+) {
   criteria <- enquo(vars)
   quo_by <- enquo(by)
 
@@ -166,15 +193,21 @@ crosstab_list <- function(data, vars, by, na.rm = FALSE, digits = 2, complete = 
   new_data %>%
     names() %>%
     purrr::set_names() %>%
-    map(~.x %>%
-          sym() %>%
-          {crosstab(data, !!., by = !!quo_by,
-                    na.rm = na.rm,
-                    digits = digits,
-                    complete = complete)}
+    map(
+      ~ .x %>%
+        sym() %>%
+        {
+          crosstab(
+            data,
+            !!.,
+            by = !!quo_by,
+            na.rm = na.rm,
+            digits = digits,
+            complete = complete
+          )
+        }
     )
 }
-
 
 
 #' Frequency distribution of a variable, a la SPSS
@@ -195,20 +228,21 @@ crosstab_list <- function(data, vars, by, na.rm = FALSE, digits = 2, complete = 
 #' @importFrom purrr map_dfc
 #' @importFrom tibble add_row
 spss_freq <- function(data, var, digits = 2) {
-
   quo_var <- enquo(var)
   chr_var <- quo_var %>% as_name()
 
   table_df <- table(data[[chr_var]], useNA = "ifany") %>%
     as.data.frame() %>%
     as_tibble() %>%
-    rename(!!quo_var := Var1,
-           frequency = Freq)
+    rename(!!quo_var := Var1, frequency = Freq)
 
-  totals_df <- totals(data, !!quo_var,
-                      na.rm = TRUE,
-                      digits = digits,
-                      complete = TRUE) %>%
+  totals_df <- totals(
+    data,
+    !!quo_var,
+    na.rm = TRUE,
+    digits = digits,
+    complete = TRUE
+  ) %>%
     rename(percent = value) %>%
     mutate(cumul_percent = cumsum(percent))
 
@@ -222,10 +256,8 @@ spss_freq <- function(data, var, digits = 2) {
 
   # if no NAs, dont worry, proceed
   if (table_df %>% filter(is.na(!!quo_var)) %>% nrow() == 0) {
-
     out %>%
       add_row(total_full_row)
-
   } else {
     # if there are NAs to consider, the table should have extra rows
     total_valid_row <- out %>%
@@ -241,4 +273,57 @@ spss_freq <- function(data, var, digits = 2) {
   }
 }
 
+#' Calculate Battery Totals
+#'
+#' This function calculates the totals for specific variables within a dataset, based on a given battery identifier. It extracts the relevant variables, computes totals, and filters them according to specified criteria.
+#'
+#' @param data A data frame containing the dataset to be analyzed.
+#' @param batt A character string representing the battery identifier used to find relevant variables within the dataset.
+#' @param label_regex A regular expression pattern used to extract labels from variable attributes. Default is `"(?<=:).*"` which extracts text following a colon.
+#' @param value_to_find A character string representing the value to filter the totals by. Default is `"Selected"`.
+#'
+#' @return A data frame containing the item labels and their corresponding total values.
+#'
+#' @details The function identifies variables associated with the specified battery, calculates their totals, and filters the results to include only those with a specified value. It also extracts item labels based on a regular expression pattern. For specific batteries (Q23_new or Q29_new), items with a total value of zero are removed.
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage:
+#' result <- batt_totals(data = my_data, batt = "Q23")
+#' }
+#'
+#' @import dplyr
+#' @import purrr
+#' @import stringr
+#' @importFrom rlang sym
+batt_totals <- function(
+  data,
+  batt,
+  label_regex = "(?<=:).*$",
+  value_to_find = "Selected"
+) {
+  vars <- find_vars(data, batt)
 
+  out <- vars %>%
+    purrr::set_names() %>%
+    map(function(x) {
+      sym_var <- sym(x)
+      out <- totals(
+        data,
+        !!sym_var,
+        digits = 0,
+        complete = TRUE,
+        na.rm = TRUE
+      ) %>%
+        filter(!!sym_var == value_to_find) %>%
+        rename(level = !!sym_var)
+    }) %>%
+    bind_rows(.id = "var") %>%
+    rowwise() %>%
+    mutate(
+      item = data[[var]] %>% attr("label") %>% str_extract(label_regex)
+    ) %>%
+    select(item, value)
+
+  out
+}
