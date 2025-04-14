@@ -9,6 +9,9 @@ inform_var_count <- function(data) {
   cli_inform(var_count_msg)
 }
 
+#' N sizes to display in crosstabs
+#'
+#' @keywords Internal
 n_table <- function(data, var, among = NULL) {
   quo_var <- enquo(var)
   quo_among <- enquo(among)
@@ -296,6 +299,8 @@ spss_freq <- function(data, var, digits = 2) {
 #' @import purrr
 #' @import stringr
 #' @importFrom rlang sym
+#'
+#' @export
 batt_totals <- function(
   data,
   batt,

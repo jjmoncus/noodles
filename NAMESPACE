@@ -3,6 +3,7 @@
 export("%>%")
 export(add_label)
 export(auto_names)
+export(batt_totals)
 export(crosstab)
 export(crosstab_list)
 export(find_label)

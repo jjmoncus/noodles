@@ -68,6 +68,7 @@ find_label <- function(data, pattern) {
 
 
 #' Lowercase names and return data
+#'
 #' @export
 #'
 #' @importFrom stringr str_to_lower
@@ -77,6 +78,7 @@ lower_names <- function(data) {
 }
 
 #' Generic Gartner ggplot theme
+#'
 #' @export
 #'
 #' @importFrom ggplot2 theme_minimal theme element_blank
