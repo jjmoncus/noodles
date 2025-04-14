@@ -179,6 +179,8 @@ auto_names <- function(data) {
 #' }
 #'
 #' @importFrom stringr str_subset
+#'
+#' @export
 find_vars <- function(
   data,
   pattern,
