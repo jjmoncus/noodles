@@ -305,8 +305,8 @@ spss_freq <- function(data, var, digits = 2) {
 batt_totals <- function(
   data,
   batt,
-  label_regex = "(?<=:).*$",
-  value_to_find = "Selected"
+  value_to_find = "Selected",
+  label_regex = "(?<=:).*$"
 ) {
   vars <- find_vars(data, batt)
 
