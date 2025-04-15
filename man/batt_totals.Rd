@@ -7,11 +7,11 @@
 batt_totals(data, batt, label_regex = "(?<=:).*$", value_to_find = "Selected")
 }
 \arguments{
-\item{data}{A data frame containing the dataset to be analyzed.}
+\item{data}{A data frame}
 
 \item{batt}{A character string representing the battery identifier used to find relevant variables within the dataset.}
 
-\item{label_regex}{A regular expression pattern used to extract labels from variable attributes. Default is \code{"(?<=:).*"} which extracts text following a colon.}
+\item{label_regex}{A regular expression, used to extract labels from variable attributes. Default is \code{"(?<=:).*"} which extracts all text following a colon.}
 
 \item{value_to_find}{A character string representing the value to filter the totals by. Default is \code{"Selected"}.}
 }
@@ -22,7 +22,8 @@ A data frame containing the item labels and their corresponding total values.
 This function calculates the totals for specific variables within a dataset, based on a given battery identifier. It extracts the relevant variables, computes totals, and filters them according to specified criteria.
 }
 \details{
-The function identifies variables associated with the specified battery, calculates their totals, and filters the results to include only those with a specified value. It also extracts item labels based on a regular expression pattern. For specific batteries (Q23_new or Q29_new), items with a total value of zero are removed.
+Filters the results to include only those with a specified value.
+It also extracts item labels based on a regular expression pattern.
 }
 \examples{
 \dontrun{

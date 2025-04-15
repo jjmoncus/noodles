@@ -280,14 +280,15 @@ spss_freq <- function(data, var, digits = 2) {
 #'
 #' This function calculates the totals for specific variables within a dataset, based on a given battery identifier. It extracts the relevant variables, computes totals, and filters them according to specified criteria.
 #'
-#' @param data A data frame containing the dataset to be analyzed.
+#' @param data A data frame
 #' @param batt A character string representing the battery identifier used to find relevant variables within the dataset.
-#' @param label_regex A regular expression pattern used to extract labels from variable attributes. Default is `"(?<=:).*"` which extracts text following a colon.
 #' @param value_to_find A character string representing the value to filter the totals by. Default is `"Selected"`.
+#' @param label_regex A regular expression, used to extract labels from variable attributes. Default is `"(?<=:).*"` which extracts all text following a colon.
 #'
 #' @return A data frame containing the item labels and their corresponding total values.
 #'
-#' @details The function identifies variables associated with the specified battery, calculates their totals, and filters the results to include only those with a specified value. It also extracts item labels based on a regular expression pattern. For specific batteries (Q23_new or Q29_new), items with a total value of zero are removed.
+#' @details Filters the results to include only those with a specified value. 
+#' It also extracts item labels based on a regular expression pattern. 
 #'
 #' @examples
 #' \dontrun{
