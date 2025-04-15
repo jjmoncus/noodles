@@ -324,7 +324,16 @@ batt_totals <- function(
         filter(!!sym_var == value_to_find) %>%
         rename(level = !!sym_var)
     }) %>%
-    bind_rows(.id = "var") %>%
+    bind_rows(.id = "var")
+  
+  # at this point, if `value_to_find` is not a level of any `vars`,
+  # then `out` will have nrow = 0, which is bad
+  
+  if (nrow(out) == 0) {
+    rlang::abort(glue("'{value_to_find}' is not a level in the variables matching '{batt}'"))
+  }
+  
+  out %>% 
     rowwise() %>%
     mutate(
       item = data[[var]] %>% attr("label") %>% str_extract(label_regex)
