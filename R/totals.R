@@ -333,7 +333,7 @@ batt_totals <- function(
     rlang::abort(glue("'{value_to_find}' is not a level in the variables matching '{batt}'"))
   }
   
-  out %>% 
+  out <- out %>% 
     rowwise() %>%
     mutate(
       item = data[[var]] %>% attr("label") %>% str_extract(label_regex)
